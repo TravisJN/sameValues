@@ -6,32 +6,60 @@
 
 var sameValues = function() {
   var result = [];
-  var values = {};
-  var isFound = true;
+  var values = {};  // Object to store the values found in every array, we use an object to prevent duplicate values in result
+  var isFound = true;  // Flag that stays true until one array doesn't contain the value being checked
+  var value;
 
+  // Check if there is more than one array passed in
   if(arguments.length > 1) {
+    // Loop through the first array, we will check each value of the first array against all the other arrays
     for (var i = 0; i < arguments[0].length; i++) {
-      var value = arguments[0][i];
+      value = arguments[0][i];  // The current element of the first array
+      // Loop through each of the arrays except the first array
       for (var j = 1; j < arguments.length; j++) {
-        var oneArray = arguments[j];
-        if (isFound && oneArray.indexOf(value) !== -1) {
-          isFound = true;
-        } else {
+        // If isFound is false, one array is missing the value and so isFound will remain false until we check a new value
+        if (arguments[j].indexOf(value) === -1) {  // If the value is not contained within the array, indexOf will return -1
           isFound = false;
+          break;  // Stop looping as soon as one array does not contain the value
         }
       }
       if(isFound) {
-        values[value] = value;
+        values[value] = value;  // Push the value into values object if it is found within all arrays
       }
-      isFound = true;
+      isFound = true;  // Reset isFound for the next value
     }
 
+    // Create a result array from values object
     for (var key in values) {
       result.push(values[key]);
     }
+  // If only one array is passed in, return that array
   } else if (arguments.length === 1) {
     result = arguments[0];
   }
 
   return result;
 };
+
+// Return an array of the first n elements of an array.
+// If n is undefined, return just the first element.
+var first = function(array, n) {
+  // This is a ternary operator, it is the same as:
+  /* if(n === undefined){
+       return array[0]
+     } else {
+       return array.slice(0, n);
+     }
+  */
+  return n === undefined ? array[0] : array.slice(0, n);
+};
+
+// Like first, but for the last elements.
+// If n is undefined, return just the last element.
+var last = function(array, n) {
+  if(n === undefined) {
+    return array[array.length - 1];
+  }
+  return array.slice(-n);
+}
+
